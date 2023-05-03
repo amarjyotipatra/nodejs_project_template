@@ -35,7 +35,7 @@ ex:
  ```
 go inside the src folder and execute the following command:
 ```
-  npx sequelize init
+  npx sequelize-cli init
 ```
 By executing the above command you will get migrations and seeders folder along with a config.json inside the config folder.
 
