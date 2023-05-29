@@ -79,5 +79,26 @@ async function getAllFlights(query){
         StatusCodes.INTERNAL_SERVER_ERROR)
  }
 }
+async function getFlight(id){
+    try {
+        const flight=await flightRepository.get(id);
+        return flight;
+    } catch (error) {
+        if(error.statusCode==StatusCodes.NOT_FOUND){
+            throw new AppError('The requested flight is not available',error.statusCode)
+        }
+        throw new AppError('Something went Wrong while fetching the data of the flight',
+        StatusCodes.INTERNAL_SERVER_ERROR)
+    }
+}
 
-module.exports={createFlight,getAllFlights,updateFlight}
+async function updateSeats(data){
+    try {
+        const response=await flightRepository.updateRemainingSeats(data.flightId,data.seats,data.dec)
+        return response;
+    } catch (error) {
+        throw new AppError('Can not update data of flights',StatusCodes.INTERNAL_SERVER_ERROR)
+    }
+}
+
+module.exports={createFlight,getAllFlights,updateFlight,getFlight,updateSeats,}

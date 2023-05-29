@@ -70,4 +70,15 @@ function validateCreateRequest(req,res,next){
     next();
 }
 
-module.exports={validateCreateRequest}
+async function validateUpdateSeatsRequest(req,res,next){
+    if(!req.body.seats){
+        ErrorResponse.message='Something went wrong while updating Seats';
+        ErrorResponse.error=new AppError(['seats not found in the incoming request in correct format'],StatusCodes.BAD_REQUEST)
+
+        return res.status(StatusCodes.BAD_REQUEST)
+        .json(ErrorResponse)
+    }
+    next();
+}
+
+module.exports={validateCreateRequest,validateUpdateSeatsRequest}

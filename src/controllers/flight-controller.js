@@ -81,4 +81,34 @@ async function updateFlight(req,res){
     }
 }
 
-module.exports={createFlight,getAllFlights,updateFlight}
+async function getFlight(req,res){
+    try {
+        const flight=await FlightService.getFlight(req.params.id);
+        return flight;
+    } catch (error) {
+        if(error.statusCode==StatusCodes.NOT_FOUND){
+            throw new AppError('The requested flight is not available',error.statusCode)
+        }
+        throw new AppError('Something went Wrong while fetching the data of the flight',
+        StatusCodes.INTERNAL_SERVER_ERROR)
+    }
+}
+
+async function updateSeats(req,res){
+    try {
+        const updatedSeats=await FlightService.updateSeats({
+            flightId:req.params.flightId,
+            seats:req.body.seats,
+            dec:req.body.dec,
+        })
+        SuccessResponse.data=updatedSeats;
+        return res.status(StatusCodes.OK)
+        .json(SuccessResponse);
+    } catch (error) {
+        ErrorResponse.error=error;
+        return res.status(error.statusCode)
+        .json(ErrorResponse)
+    }
+}
+
+module.exports={createFlight,getAllFlights,updateFlight,getFlight,updateSeats,}
